@@ -1,8 +1,7 @@
 name: flutter_microsvc_util
 description: A new flutter plugin project.
 version: 0.3.0
-author:
-homepage:
+homepage: https://git.gsenext.com/microsvc/flutter_microsvc_util
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

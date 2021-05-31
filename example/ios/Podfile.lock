@@ -1,0 +1,57 @@
+PODS:
+  - FBSDKCoreKit (9.1.0):
+    - FBSDKCoreKit/Basics (= 9.1.0)
+    - FBSDKCoreKit/Core (= 9.1.0)
+  - FBSDKCoreKit/Basics (9.1.0)
+  - FBSDKCoreKit/Core (9.1.0):
+    - FBSDKCoreKit/Basics
+  - FBSDKShareKit (9.1.0):
+    - FBSDKShareKit/Share (= 9.1.0)
+  - FBSDKShareKit/Share (9.1.0):
+    - FBSDKCoreKit (~> 9.1.0)
+  - Flutter (1.0.0)
+  - flutter_microsvc_util (0.3.0):
+    - FBSDKCoreKit (~> 9.1.0)
+    - FBSDKShareKit
+    - Flutter
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
+  - share (0.0.1):
+    - Flutter
+  - Toast (4.0.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_microsvc_util (from `.symlinks/plugins/flutter_microsvc_util/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - share (from `.symlinks/plugins/share/ios`)
+
+SPEC REPOS:
+  trunk:
+    - FBSDKCoreKit
+    - FBSDKShareKit
+    - Toast
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_microsvc_util:
+    :path: ".symlinks/plugins/flutter_microsvc_util/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  share:
+    :path: ".symlinks/plugins/share/ios"
+
+SPEC CHECKSUMS:
+  FBSDKCoreKit: a00fe2efd780c195a5e09201bf51c56106245b40
+  FBSDKShareKit: d5aafc35870083f53c15ec0eb9eda4dfe8037d11
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_microsvc_util: d5b697a0eebbd43bbaa0cfdd91bb7d29effe34e6
+  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.10.1

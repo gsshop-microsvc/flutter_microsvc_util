@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_microsvc_util'
-  s.version          = '0.3.0'
+  s.version          = '0.3.1'
   s.summary          = 'microsvc flutter util'
   s.description      = <<-DESC
 A new flutter plugin project.

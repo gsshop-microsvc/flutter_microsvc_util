@@ -15,11 +15,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  static final flutterMicroSvcUtil = FlutterMicroSvcUtil();
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+
+    flutterMicroSvcUtil.setAdvertiserTracking(enabled: true);
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -73,6 +76,12 @@ class _MyAppState extends State<MyApp> {
   shareOnOtherCopy(var message) async {
     String result =
         (await FlutterMicroSvcUtil.shareOnOtherCopy(text: message))!;
+    print(result);
+  }
+
+  logPurchase(var _amount, var _currency) async {
+    String? result = await flutterMicroSvcUtil.logPurchase(
+        amount: _amount, currency: _currency);
     print(result);
   }
 
@@ -156,6 +165,12 @@ class _MyAppState extends State<MyApp> {
               child: Text("다른 앱으로 공유하기"),
               onPressed: () {
                 shareOnOtherCopy(sharedMessage);
+              },
+            ),
+            TextButton(
+              child: Text("Facebook purchase"),
+              onPressed: () {
+                logPurchase(1.0, "USD");
               },
             ),
           ],

@@ -70,11 +70,12 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onDetachedFromActivity() {
-    TODO("Not yet implemented")
+    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivity")
+    activity = null;
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
+    activity = binding.activity
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
@@ -82,7 +83,8 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
-    TODO("Not yet implemented")
+    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivityForConfigChanges")
+    activity = null;
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -190,6 +192,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
       intent.putExtra("address", recipients)
       intent.putExtra("sms_body", text)
       activity?.startActivity(Intent.createChooser(intent, "Send sms via:"))
+      result.success("success")
     } catch (e: Exception) {
       result.success(e.localizedMessage)
     }
@@ -251,6 +254,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     shareIntent.putExtra(Intent.EXTRA_BCC, bccrecipients)
     try {
       activity?.startActivity(Intent.createChooser(shareIntent, "Send email using..."))
+      result.success("success")
     } catch (e: ActivityNotFoundException) {
       result.success("activity not found")
     }

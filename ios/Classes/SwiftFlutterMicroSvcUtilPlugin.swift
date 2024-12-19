@@ -202,13 +202,13 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
             let shareString = "line://msg/text/\(txtMsg)"
             let escapedShareString = shareString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
             let url = URL(string: escapedShareString)
-            let isOpen = false
+            var isOpen = false
             if #available(iOS 10.0, *) {
-        UIApplication.shared.open(url, options: [:]) { success in
+        UIApplication.shared.open(url!, options: [:]) { success in
             isOpen = success
         }
         } else {
-        isOpen = UIApplication.shared.openURL(url)
+        isOpen = UIApplication.shared.openURL(url!)
         }
             if (!isOpen) {
                 guard let url = URL(string: "https://apps.apple.com/us/app/line/id443904275")

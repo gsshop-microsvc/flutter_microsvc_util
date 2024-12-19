@@ -186,7 +186,11 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
         let shareString = "https://twitter.com/intent/tweet?text=\(txtMsg)&url=\(url)"
         let escapedShareString = shareString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         let url = URL(string: escapedShareString)
-        UIApplication.shared.openURL(url!)
+            if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url!, options: [:])
+                } else {
+                    UIApplication.shared.openURL (url!)
+                }
 
         self.result?("Success")
     }
@@ -198,8 +202,14 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
             let shareString = "line://msg/text/\(txtMsg)"
             let escapedShareString = shareString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
             let url = URL(string: escapedShareString)
-            let isOpen = UIApplication.shared.openURL(url!)
-
+            let isOpen = false
+            if #available(iOS 10.0, *) {
+        UIApplication.shared.open(url, options: [:]) { success in
+            isOpen = success
+        }
+        } else {
+        isOpen = UIApplication.shared.openURL(url)
+        }
             if (!isOpen) {
                 guard let url = URL(string: "https://apps.apple.com/us/app/line/id443904275")
                 // guard let url = URL(string: "itms-apps://itunes.apple.com/app/id443904275")

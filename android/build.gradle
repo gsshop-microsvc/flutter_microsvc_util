@@ -45,5 +45,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.facebook.android:facebook-share:5.9.0'
     implementation 'com.facebook.android:facebook-core:9.1.0'
-    implementation 'com.twitter.sdk.android:twitter:3.3.0' //twitter share
+    compile('com.twitter.sdk.android:twitter:3.3.0@aar') {
+    transitive = true
+  }
 }

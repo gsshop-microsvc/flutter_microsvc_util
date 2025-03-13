@@ -350,11 +350,11 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     return bundle
   }
 
-  companion object {
-    private var callbackManager: CallbackManager? = null
-    private const val INSTAGRAM_PACKAGE_NAME = "com.instagram.android"
-    private const val WHATSAPP_PACKAGE_NAME = "com.whatsapp"
-    private var registrar: PluginRegistry.Registrar? = null
+ // companion object {
+ //   private var callbackManager: CallbackManager? = null
+  //  private const val INSTAGRAM_PACKAGE_NAME = "com.instagram.android"
+  //  private const val WHATSAPP_PACKAGE_NAME = "com.whatsapp"
+    // private var registrar: PluginRegistry.Registrar? = null
 
     // private void onAttachedToEngine(Context context, BinaryMessenger messenger) {
     //   activityContext = context;
@@ -363,9 +363,9 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     //   this.registrar=registrar;
     // }
 
-    private fun setRegistrar(_registrar: PluginRegistry.Registrar) {
-      registrar = _registrar
-    }
+ //   private fun setRegistrar(_registrar: PluginRegistry.Registrar) {
+  //    registrar = _registrar
+  //  }
 
     /**
      * Plugin registration.
@@ -376,5 +376,5 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 //      instance.activity = registrar.activity()
 //      setRegistrar(registrar)
 //    }
-  }
+ // }
 }

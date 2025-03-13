@@ -52,7 +52,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   fun onAttachedToEngine(@NonNull flutterPluginBinding: BinaryMessenger) {
     channel = MethodChannel(flutterPluginBinding, "flutter_microsvc_util")
     channel.setMethodCallHandler(this)
-    callbackManager = CallbackManager.Factory.create()
+   //  callbackManager = CallbackManager.Factory.create()
   }
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {

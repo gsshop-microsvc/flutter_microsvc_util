@@ -45,7 +45,6 @@ android {
 
 dependencies {
     implementation project(":tweeter-composer")
-    implementation project(":twitter-core")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.facebook.android:facebook-share:5.9.0'
     implementation 'com.facebook.android:facebook-core:9.1.0'

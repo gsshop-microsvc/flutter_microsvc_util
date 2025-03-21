@@ -1,2 +1,4 @@
 include ':twitter-core'
+project(':twitter-core').projectDir = file('../android/twitter-core')
 include ':tweeter-composer'
+project(':tweeter-composer').projectDir = file('../android/tweeter-composer')

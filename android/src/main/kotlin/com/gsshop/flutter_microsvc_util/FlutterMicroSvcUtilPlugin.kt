@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.media.FaceDetector
 import android.net.Uri
+import android.os.Build
 import androidx.annotation.NonNull
 import android.os.Bundle
 
@@ -89,7 +90,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
+      result.success("Android ${Build.VERSION.RELEASE}")
     } else if (call.method == "share") {
       var type: String? = call.argument("type")
       var quote: String? = call.argument("quote")

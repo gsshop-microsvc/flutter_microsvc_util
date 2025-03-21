@@ -24,8 +24,6 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import java.net.MalformedURLException
 import java.net.URL
 
-import com.twitter.sdk.android.tweetcomposer.TweetComposer
-
 import com.facebook.CallbackManager
 import com.facebook.share.model.ShareLinkContent
 import com.facebook.share.widget.ShareDialog
@@ -33,6 +31,7 @@ import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.GraphRequest
 import com.facebook.GraphResponse
+import com.twitter.sdk.android.tweetcomposer.TweetComposer
 import java.util.*
 
 /** FlutterMicroSvcUtilPlugin */

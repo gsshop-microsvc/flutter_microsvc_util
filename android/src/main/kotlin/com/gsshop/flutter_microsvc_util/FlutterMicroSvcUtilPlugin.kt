@@ -1,38 +1,31 @@
 package com.gsshop.flutter_microsvc_util
 
+// import com.twitter.sdk.android.tweetcomposer.TweetComposer
+
 import android.app.Activity
 import android.content.*
-import android.content.Context
 import android.content.pm.PackageManager
-import android.media.FaceDetector
 import android.net.Uri
-import androidx.annotation.NonNull
 import android.os.Bundle
-
+import androidx.annotation.NonNull
+import com.facebook.CallbackManager
+import com.facebook.appevents.AppEventsLogger
+import com.facebook.share.model.ShareLinkContent
+import com.facebook.share.widget.ShareDialog
 import io.flutter.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.PluginRegistry
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-
 import java.net.MalformedURLException
 import java.net.URL
-
-// import com.twitter.sdk.android.tweetcomposer.TweetComposer
-
-import com.facebook.CallbackManager
-import com.facebook.share.model.ShareLinkContent
-import com.facebook.share.widget.ShareDialog
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
-import com.facebook.GraphRequest
-import com.facebook.GraphResponse
 import java.util.*
+import androidx.core.net.toUri
+
 
 /** FlutterMicroSvcUtilPlugin */
 class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -106,13 +99,13 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 
       shareOnSMS(recipients, textMsg, result)
     }
-    // else if (call.method == "shareOnTwitter") {
-    //  val url: String? = call.argument("url")
-    //  val textMsg: String? = call.argument("text")
-      // val trailingText: String? = call.argument("trailingText")
+     else if (call.method == "shareOnTwitter") {
+      val url: String? = call.argument("url")
+      val textMsg: String? = call.argument("text")
+       val trailingText: String? = call.argument("trailingText")
 
-    //  shareOnTwitter(url, textMsg, result)
-    //} 
+      shareOnTwitter(url, textMsg, result)
+    }
     else if (call.method == "shareOnLine") {
       val textMsg: String? = call.argument("text")
 
@@ -200,21 +193,31 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     }
   }
 
-  //private fun shareOnTwitter(url: String?, text: String?, result: Result) {
-  //  try {
+  private fun shareOnTwitter(url: String?, text: String?, result: Result) {
+
+    try {
+      val twitterUrl = URL("https://twitter.com/intent/tweet?text=$text&url=$url")
+      val twitterIntent = Intent(Intent.ACTION_VIEW, twitterUrl.toString().toUri())
+      activity!!.startActivity(twitterIntent)
+      result.success("success")
+    } catch (e: MalformedURLException) {
+      result.success(e.localizedMessage)
+    }
+
+//    try {
 //      val builder: TweetComposer.Builder = Builder(activity)
 //              .text(text)
-  //    val builder = TweetComposer.Builder(activity).text(text)
-
-   //   if (url != null && url.length > 0) {
-   //     builder.url(URL(url))
-    //  }
-    //  builder.show()
-   //   result.success("success")
-   // } catch (e: MalformedURLException) {
-   //   result.success(e.localizedMessage)
-   // }
- // }
+//      val builder = TweetComposer.Builder(activity).text(text)
+//
+//      if (url != null && url.length > 0) {
+//        builder.url(URL(url))
+//      }
+//      builder.show()
+//      result.success("success")
+//    } catch (e: MalformedURLException) {
+//      result.success(e.localizedMessage)
+//    }
+  }
 
   private fun shareOnLine(text: String?, result: Result) {
     try {

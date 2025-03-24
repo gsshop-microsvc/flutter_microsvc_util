@@ -1,6 +1,6 @@
 rootProject.name = 'com.gsshop.flutter_microsvc_util'
 
-include 'twitter-core'
-project(':twitter-core').projectDir = file('../android/twitter-core')
-include 'tweeter-composer'
-project(':tweeter-composer').projectDir = file('../android/tweeter-composer')
+include 'module-twitter-core'
+project(':module-twitter-core').projectDir = file('../android/twitter-core')
+include 'module-tweeter-composer'
+project(':module-tweeter-composer').projectDir = file('../android/tweeter-composer')

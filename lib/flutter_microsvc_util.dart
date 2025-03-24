@@ -42,15 +42,15 @@ class FlutterMicroSvcUtil {
     return message;
   }
 
-  static Future<String?> shareOnTwitter({String? url, String? text}) async {
-    final Map<String, dynamic> params = <String, dynamic>{
-      "url": url,
-      "text": text
-    };
-    final String? message =
-        await _channel.invokeMethod('shareOnTwitter', params);
-    return message;
-  }
+  // static Future<String?> shareOnTwitter({String? url, String? text}) async {
+  //   final Map<String, dynamic> params = <String, dynamic>{
+  //     "url": url,
+  //     "text": text
+  //   };
+  //   final String? message =
+  //       await _channel.invokeMethod('shareOnTwitter', params);
+  //   return message;
+  // }
 
   static Future<String?> shareOnLine({String? text}) async {
     final Map<String, dynamic> params = <String, dynamic>{"text": text};

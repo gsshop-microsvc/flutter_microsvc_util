@@ -23,7 +23,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import java.net.MalformedURLException
 import java.net.URL
 
-import com.twitter.sdk.android.tweetcomposer.TweetComposer
+// import com.twitter.sdk.android.tweetcomposer.TweetComposer
 
 import com.facebook.CallbackManager
 import com.facebook.share.model.ShareLinkContent
@@ -105,13 +105,15 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
       val textMsg: String? = call.argument("text")
 
       shareOnSMS(recipients, textMsg, result)
-    } else if (call.method == "shareOnTwitter") {
-      val url: String? = call.argument("url")
-      val textMsg: String? = call.argument("text")
+    }
+    // else if (call.method == "shareOnTwitter") {
+    //  val url: String? = call.argument("url")
+    //  val textMsg: String? = call.argument("text")
       // val trailingText: String? = call.argument("trailingText")
 
-      shareOnTwitter(url, textMsg, result)
-    } else if (call.method == "shareOnLine") {
+    //  shareOnTwitter(url, textMsg, result)
+    //} 
+    else if (call.method == "shareOnLine") {
       val textMsg: String? = call.argument("text")
 
       shareOnLine(textMsg, result)
@@ -198,21 +200,21 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     }
   }
 
-  private fun shareOnTwitter(url: String?, text: String?, result: Result) {
-    try {
+  //private fun shareOnTwitter(url: String?, text: String?, result: Result) {
+  //  try {
 //      val builder: TweetComposer.Builder = Builder(activity)
 //              .text(text)
-      val builder = TweetComposer.Builder(activity).text(text)
+  //    val builder = TweetComposer.Builder(activity).text(text)
 
-      if (url != null && url.length > 0) {
-        builder.url(URL(url))
-      }
-      builder.show()
-      result.success("success")
-    } catch (e: MalformedURLException) {
-      result.success(e.localizedMessage)
-    }
-  }
+   //   if (url != null && url.length > 0) {
+   //     builder.url(URL(url))
+    //  }
+    //  builder.show()
+   //   result.success("success")
+   // } catch (e: MalformedURLException) {
+   //   result.success(e.localizedMessage)
+   // }
+ // }
 
   private fun shareOnLine(text: String?, result: Result) {
     try {

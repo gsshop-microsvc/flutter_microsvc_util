@@ -57,11 +57,11 @@ class _MyAppState extends State<MyApp> {
     print(result);
   }
 
-  shareOnTwitter(var url, var message) async {
-    String result =
-        (await FlutterMicroSvcUtil.shareOnTwitter(url: url, text: message))!;
-    print(result);
-  }
+  // shareOnTwitter(var url, var message) async {
+  //   String result =
+  //       (await FlutterMicroSvcUtil.shareOnTwitter(url: url, text: message))!;
+  //   print(result);
+  // }
 
   shareOnLine(var message) async {
     String result = (await FlutterMicroSvcUtil.shareOnLine(text: message))!;
@@ -149,12 +149,12 @@ class _MyAppState extends State<MyApp> {
                 shareOnFacebook('http://m.gsshop.com', sharedMessage);
               },
             ),
-            TextButton(
-              child: Text("트위터 공유"),
-              onPressed: () {
-                shareOnTwitter('http://m.gsshop.com', sharedMessage);
-              },
-            ),
+            // TextButton(
+            //   child: Text("트위터 공유"),
+            //   onPressed: () {
+            //     shareOnTwitter('http://m.gsshop.com', sharedMessage);
+            //   },
+            // ),
             TextButton(
               child: Text("URL 복사"),
               onPressed: () {

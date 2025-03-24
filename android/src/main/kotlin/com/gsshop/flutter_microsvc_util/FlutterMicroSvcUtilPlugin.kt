@@ -1,30 +1,38 @@
 package com.gsshop.flutter_microsvc_util
 
-// import com.twitter.sdk.android.tweetcomposer.TweetComposer
-
 import android.app.Activity
 import android.content.*
+import android.content.Context
 import android.content.pm.PackageManager
+import android.media.FaceDetector
 import android.net.Uri
-import android.os.Bundle
 import androidx.annotation.NonNull
-import com.facebook.CallbackManager
-import com.facebook.appevents.AppEventsLogger
-import com.facebook.share.model.ShareLinkContent
-import com.facebook.share.widget.ShareDialog
+import android.os.Bundle
+
 import io.flutter.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.PluginRegistry
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+
 import java.net.MalformedURLException
 import java.net.URL
+
+// import com.twitter.sdk.android.tweetcomposer.TweetComposer
+
+import com.facebook.CallbackManager
+import com.facebook.share.model.ShareLinkContent
+import com.facebook.share.widget.ShareDialog
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+import com.facebook.GraphRequest
+import com.facebook.GraphResponse
 import java.util.*
-import androidx.core.net.toUri
 
 
 /** FlutterMicroSvcUtilPlugin */
@@ -197,8 +205,8 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 
     try {
       val twitterUrl = URL("https://twitter.com/intent/tweet?text=$text&url=$url")
-      val twitterIntent = Intent(Intent.ACTION_VIEW, twitterUrl.toString().toUri())
-      activity!!.startActivity(twitterIntent)
+      val twitterIntent = Intent(Intent.ACTION_VIEW, Uri.parse(twitterUrl.toString()))
+      activity?.startActivity(twitterIntent)
       result.success("success")
     } catch (e: MalformedURLException) {
       result.success(e.localizedMessage)

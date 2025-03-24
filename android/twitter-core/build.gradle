@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'twitter-core'
+    namespace 'com.twitter.sdk.android.core'
     compileSdk 33
 
     defaultConfig {

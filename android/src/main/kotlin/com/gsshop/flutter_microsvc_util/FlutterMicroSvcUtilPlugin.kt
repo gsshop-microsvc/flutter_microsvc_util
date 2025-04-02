@@ -23,7 +23,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import java.net.MalformedURLException
 import java.net.URL
 
-import com.twitter.sdk.android.tweetcomposer.TweetComposer
+// import com.twitter.sdk.android.tweetcomposer.TweetComposer
 
 import com.facebook.CallbackManager
 import com.facebook.share.model.ShareLinkContent
@@ -33,6 +33,7 @@ import com.facebook.appevents.AppEventsLogger
 import com.facebook.GraphRequest
 import com.facebook.GraphResponse
 import java.util.*
+
 
 /** FlutterMicroSvcUtilPlugin */
 class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -105,13 +106,15 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
       val textMsg: String? = call.argument("text")
 
       shareOnSMS(recipients, textMsg, result)
-    } else if (call.method == "shareOnTwitter") {
+    }
+     else if (call.method == "shareOnTwitter") {
       val url: String? = call.argument("url")
       val textMsg: String? = call.argument("text")
-      // val trailingText: String? = call.argument("trailingText")
+       val trailingText: String? = call.argument("trailingText")
 
       shareOnTwitter(url, textMsg, result)
-    } else if (call.method == "shareOnLine") {
+    }
+    else if (call.method == "shareOnLine") {
       val textMsg: String? = call.argument("text")
 
       shareOnLine(textMsg, result)
@@ -199,19 +202,29 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   private fun shareOnTwitter(url: String?, text: String?, result: Result) {
-    try {
-//      val builder: TweetComposer.Builder = Builder(activity)
-//              .text(text)
-      val builder = TweetComposer.Builder(activity).text(text)
 
-      if (url != null && url.length > 0) {
-        builder.url(URL(url))
-      }
-      builder.show()
+    try {
+      val twitterUrl = URL("https://twitter.com/intent/tweet?text=$text&url=$url")
+      val twitterIntent = Intent(Intent.ACTION_VIEW, Uri.parse(twitterUrl.toString()))
+      activity?.startActivity(twitterIntent)
       result.success("success")
     } catch (e: MalformedURLException) {
       result.success(e.localizedMessage)
     }
+
+//    try {
+//      val builder: TweetComposer.Builder = Builder(activity)
+//              .text(text)
+//      val builder = TweetComposer.Builder(activity).text(text)
+//
+//      if (url != null && url.length > 0) {
+//        builder.url(URL(url))
+//      }
+//      builder.show()
+//      result.success("success")
+//    } catch (e: MalformedURLException) {
+//      result.success(e.localizedMessage)
+//    }
   }
 
   private fun shareOnLine(text: String?, result: Result) {

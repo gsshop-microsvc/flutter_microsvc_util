@@ -203,7 +203,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 
   private fun shareOnTwitter(url: String?, text: String?, result: Result) {
     try {
-      val twitterUrl = URL("https://twitter.com/intent/tweet?text=${text.replace("%", "%25")}&url=$url")
+      val twitterUrl = URL("https://twitter.com/intent/tweet?text=${text?.replace("%", "%25")}&url=$url")
       val twitterIntent = Intent(Intent.ACTION_VIEW, Uri.parse(twitterUrl.toString()))
       activity?.startActivity(twitterIntent)
       result.success("success")

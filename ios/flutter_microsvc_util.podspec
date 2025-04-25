@@ -15,8 +15,8 @@ A new flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'FBSDKCoreKit', '~> 9.1.0'
-  s.dependency 'FBSDKShareKit'
+  s.dependency 'FBSDKCoreKit', '~> 17.0.2'
+  s.dependency 'FBSDKShareKit', '~> 17.0.2'
 
   s.platform = :ios, '8.0'
 

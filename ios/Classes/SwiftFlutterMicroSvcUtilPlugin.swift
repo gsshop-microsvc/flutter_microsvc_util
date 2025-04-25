@@ -16,20 +16,20 @@ extension Dictionary {
 }
 
 
-
+@objcMembers
 public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin, SharingDelegate {
   var result: FlutterResult?
   var shareURL:String?
 
- public static func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+ @objc public func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
     print("공유 성공: \(results)")
 }
 
-public static func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+@objc public func sharer(_ sharer: Sharing, didFailWithError error: Error) {
     print("공유 실패: \(error.localizedDescription)")
 }
 
-public static func sharerDidCancel(_ sharer: Sharing) {
+@objc public func sharerDidCancel(_ sharer: Sharing) {
     print("공유 취소됨")
 }
 

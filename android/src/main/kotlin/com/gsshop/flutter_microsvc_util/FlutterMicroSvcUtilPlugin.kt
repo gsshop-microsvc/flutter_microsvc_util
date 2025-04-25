@@ -26,10 +26,10 @@ import java.net.URLEncoder
 
 // import com.twitter.sdk.android.tweetcomposer.TweetComposer
 
-//import com.facebook.CallbackManager
+import com.facebook.CallbackManager
 import com.facebook.share.model.ShareLinkContent
 import com.facebook.share.widget.ShareDialog
-//import com.facebook.appevents.AppEventsLogger
+import com.facebook.appevents.AppEventsLogger
 import java.util.*
 
 
@@ -40,7 +40,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
-//  private lateinit var appEventsLogger: AppEventsLogger
+  private lateinit var appEventsLogger: AppEventsLogger
   private lateinit var anonymousId: String
 
   private var activity: Activity? = null
@@ -51,7 +51,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   fun onAttachedToEngine(@NonNull flutterPluginBinding: BinaryMessenger) {
     channel = MethodChannel(flutterPluginBinding, "flutter_microsvc_util")
     channel.setMethodCallHandler(this)
-//    callbackManager = CallbackManager.Factory.create()
+    callbackManager = CallbackManager.Factory.create()
   }
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -59,9 +59,8 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     channel.setMethodCallHandler(this)
 
     activityContext = binding.getApplicationContext()
-
-//    appEventsLogger = AppEventsLogger.newLogger(activityContext)
-//    anonymousId = AppEventsLogger.getAnonymousAppDeviceGUID(activityContext)
+    appEventsLogger = AppEventsLogger.newLogger(activityContext)
+    anonymousId = AppEventsLogger.getAnonymousAppDeviceGUID(activityContext)
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -150,6 +149,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
    */
 
    private fun shareToFacebook(url: String?, quote: String?, result: Result) {
+    FacebookSdk.sdkInitialize(activityContext)
     if (url.isNullOrEmpty()) {
         result.error("INVALID_URL", "URL이 비어 있습니다.", null)
         return

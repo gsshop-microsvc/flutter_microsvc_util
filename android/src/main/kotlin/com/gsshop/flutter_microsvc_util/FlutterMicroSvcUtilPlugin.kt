@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.annotation.NonNull
 import com.facebook.CallbackManager
@@ -143,7 +144,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
    * @param result Result
    */
 
-  @SuppressLint("NewApi")
+  @androidx.annotation.RequiresApi(Build.VERSION_CODES.DONUT)
   private fun shareToFacebook(url: String?, quote: String?, result: Result) {
     try {
       val intent = Intent(Intent.ACTION_SEND)

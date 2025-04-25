@@ -15,7 +15,7 @@ extension Dictionary {
     }
 }
 
-public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin, SharingDelegate {
   var result: FlutterResult?
   var shareURL:String?
 
@@ -115,26 +115,33 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
 
     //MARK: SHARE POST ON FACEBOOK WITHOUT IMAGE
     private func shareFacebookWithoutImage(withQuote quote: String?, withUrl urlString: String?) {
-        DispatchQueue.main.async {
-            let shareContent = ShareLinkContent()
-            let shareDialog = ShareDialog()
-            if let url = urlString {
-                shareContent.contentURL = URL.init(string: url)!
-            }
-            if let quoteString = quote {
-                shareContent.quote = quoteString.htmlToString
-            }
-            shareDialog.shareContent = shareContent
-            if let flutterAppDelegate = UIApplication.shared.delegate as? FlutterAppDelegate {
-                shareDialog.fromViewController = flutterAppDelegate.window.rootViewController
-                shareDialog.mode = .automatic
-                shareDialog.show()
-                self.result?("Success")
-            } else{
-                self.result?("Failure")
-            }
+    DispatchQueue.main.async {
+        let shareContent = ShareLinkContent()
+        let shareDialog = ShareDialog()
+        
+        if let url = urlString {
+            shareContent.contentURL = URL(string: url)!
+        }
+        
+        if let quoteString = quote {
+            shareContent.quote = quoteString.htmlToString
+        }
+        
+        shareDialog.shareContent = shareContent
+        
+        if let flutterAppDelegate = UIApplication.shared.delegate as? FlutterAppDelegate,
+           let rootViewController = flutterAppDelegate.window?.rootViewController {
+            
+            shareDialog.fromViewController = rootViewController
+            shareDialog.mode = .automatic
+            shareDialog.delegate = self // 여기 수정!
+            shareDialog.show()
+            self.result?("Success")
+        } else {
+            self.result?("Failure")
         }
     }
+}
   
     //MARK: SHARE POST ON INSTAGRAM WITH IMAGE NETWORKING URL
     private func shareInstagramWithImageUrl(image: UIImage, result:((Bool)->Void)? = nil) {
@@ -279,10 +286,10 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
         let parameters = arguments["parameters"] as? [String: Any] ?? [String: Any]()
         if arguments["_valueToSum"] != nil && !(arguments["_valueToSum"] is NSNull) {
             let valueToDouble = arguments["_valueToSum"] as! Double
-            AppEvents.logEvent(AppEvents.Name(eventName), valueToSum: valueToDouble, parameters:  parameters.mapKeys { AppEvents.ParameterName($0) })
+            AppEvents.shared.logEvent(AppEvents.Name(eventName), valueToSum: valueToDouble, parameters:  parameters.mapKeys { AppEvents.ParameterName($0) })
         } else {
             // AppEvents.logEvent(AppEvents.Name(eventName), parameters: parameters)
-            AppEvents.logEvent(AppEvents.Name(eventName), parameters: parameters.mapKeys { AppEvents.ParameterName($0) })
+            AppEvents.shared.logEvent(AppEvents.Name(eventName), parameters: parameters.mapKeys { AppEvents.ParameterName($0) })
 
         }
 
@@ -294,7 +301,7 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
         let amount = arguments["amount"] as! Double
         let currency = arguments["currency"] as! String
         let parameters = arguments["parameters"] as? [String: Any] ?? [String: Any]()
-        AppEvents.logPurchase(amount, currency: currency, parameters: parameters.mapKeys { AppEvents.ParameterName($0) })
+        AppEvents.shared.logPurchase(amount, currency: currency, parameters: parameters.mapKeys { AppEvents.ParameterName($0) })
         // AppEvents.logPurchase(amount, currency: currency, parameters: parameters)
 
         self.result?("Success")
@@ -308,7 +315,7 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
             // AppEvents.logPushNotificationOpen(payload!, action: actionString)
             AppEvents.shared.logPushNotificationOpen(payload: payload!, action: actionString)
         } else {
-            AppEvents.logPushNotificationOpen(payload!)
+            AppEvents.shared.logPushNotificationOpen(payload!)
         }
 
         self.result?("Success")

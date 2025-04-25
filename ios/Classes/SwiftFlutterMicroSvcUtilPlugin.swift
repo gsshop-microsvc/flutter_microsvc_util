@@ -17,9 +17,21 @@ extension Dictionary {
 
 
 
-public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin, SharingDelegate {
   var result: FlutterResult?
   var shareURL:String?
+
+  func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+    print("공유 성공: \(results)")
+}
+
+func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+    print("공유 실패: \(error.localizedDescription)")
+}
+
+func sharerDidCancel(_ sharer: Sharing) {
+    print("공유 취소됨")
+}
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "flutter_microsvc_util", binaryMessenger: registrar.messenger())
@@ -132,7 +144,7 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
            let rootViewController = flutterAppDelegate.window?.rootViewController {
             
             let shareDialog = ShareDialog(
-                fromViewController: rootViewController,
+                viewController: rootViewController,
                 content: shareContent,
                 delegate: self
             )

@@ -149,7 +149,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
    */
 
    private fun shareToFacebook(url: String?, quote: String?, result: Result) {
-    FacebookSdk.sdkInitialize(activityContext)
+    FacebookSdk.sdkInitialize(activityContext!!)
     if (url.isNullOrEmpty()) {
         result.error("INVALID_URL", "URL이 비어 있습니다.", null)
         return

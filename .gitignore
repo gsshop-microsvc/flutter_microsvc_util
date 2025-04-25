@@ -6,6 +6,8 @@
 
 build/
 .idea
-.fvm
 .vscode
+
+# FVM Version Cache
+.fvm/
 .fvmrc

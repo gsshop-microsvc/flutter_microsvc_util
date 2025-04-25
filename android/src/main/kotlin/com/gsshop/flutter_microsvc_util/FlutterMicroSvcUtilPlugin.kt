@@ -22,6 +22,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
 import java.net.MalformedURLException
 import java.net.URL
+import java.net.URLEncoder
 
 // import com.twitter.sdk.android.tweetcomposer.TweetComposer
 
@@ -202,8 +203,11 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   private fun shareOnTwitter(url: String?, text: String?, result: Result) {
+
+    val reText = encodeSpecialCharacters(text)
+
     try {
-      val twitterUrl = URL("https://twitter.com/intent/tweet?text=${text.replace("%", "%25")}&url=$url")
+      val twitterUrl = URL("https://twitter.com/intent/tweet?text=$reText&url=$url")
       val twitterIntent = Intent(Intent.ACTION_VIEW, Uri.parse(twitterUrl.toString()))
       activity?.startActivity(twitterIntent)
       result.success("success")
@@ -225,6 +229,16 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 //      result.success(e.localizedMessage)
 //    }
   }
+
+ private fun encodeSpecialCharacters(input: String?): String? {
+    // 특수 문자를 정의하는 정규식
+    val specialCharRegex = Regex("[!#%&@`:;,.<>?~\\[\\]\\{\\}\\^\\*\\+\\$\\|'\"()]")
+    
+    // 특수 문자만 인코딩
+    return input?.replace(specialCharRegex) { matchResult ->
+        URLEncoder.encode(matchResult.value, "UTF-8")
+    }
+}
 
   private fun shareOnLine(text: String?, result: Result) {
     try {

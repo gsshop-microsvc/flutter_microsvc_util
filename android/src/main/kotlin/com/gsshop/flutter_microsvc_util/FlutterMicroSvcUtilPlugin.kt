@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.media.FaceDetector
 import android.net.Uri
-import android.os.Build
 import androidx.annotation.NonNull
 import android.os.Bundle
 
@@ -26,11 +25,14 @@ import java.net.URL
 import java.net.URLEncoder
 
 // import com.twitter.sdk.android.tweetcomposer.TweetComposer
-import com.facebook.FacebookSdk
+
 import com.facebook.CallbackManager
 import com.facebook.share.model.ShareLinkContent
 import com.facebook.share.widget.ShareDialog
+import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
+import com.facebook.GraphRequest
+import com.facebook.GraphResponse
 import java.util.*
 
 
@@ -60,8 +62,9 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     channel.setMethodCallHandler(this)
 
     activityContext = binding.getApplicationContext()
-  //  appEventsLogger = AppEventsLogger.newLogger(activityContext)
-  //  anonymousId = AppEventsLogger.getAnonymousAppDeviceGUID(activityContext)
+
+    appEventsLogger = AppEventsLogger.newLogger(activityContext)
+    anonymousId = AppEventsLogger.getAnonymousAppDeviceGUID(activityContext)
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -69,7 +72,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onDetachedFromActivity() {
-//    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivity")
+    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivity")
     activity = null;
   }
 
@@ -82,7 +85,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
-//    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivityForConfigChanges")
+    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivityForConfigChanges")
     activity = null;
   }
 
@@ -131,9 +134,9 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     } else if (call.method == "setAdvertiserTracking") {
       setAdvertiserTracking(call, result)
     } else if (call.method == "logEvent") {
-//      logEvent(call, result)
+      logEvent(call, result)
     } else if (call.method == "logPurchase") {
-//      purchased(call, result)
+      purchased(call, result)
     } else if (call.method == "logPushNotificationOpen") {
       pushNotificationOpen(call, result)
     } else {
@@ -148,75 +151,20 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
    * @param quote    String
    * @param result Result
    */
-
   private fun shareToFacebook(url: String?, quote: String?, result: Result) {
-    try {
-      val intent = Intent(Intent.ACTION_SEND)
-
-        // If no image is provided, share the message as text
-        intent.setType("text/plain")
-
-
-      // Add the message if provided
-      var str = "";
-      if (quote != null && !quote.isEmpty()) {
-        str = "${str}quote"
-//        intent.putExtra(Intent.EXTRA_TEXT, quote)
-      }
-      if (url != null && !url.isEmpty()) {
-        str = "${str}\nurl"
-      }
-
-      intent.putExtra(Intent.EXTRA_TEXT, str)
-      // Set the package to Facebook
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.DONUT) {
-            intent.setPackage("com.facebook.katana")
-        }
-
-        activity!!.startActivity(intent)
-      result.success("success")
-    } catch (e: ActivityNotFoundException) {
-      result.error("FACEBOOK_NOT_INSTALLED", "Facebook is not installed on this device", null)
-    } catch (e: java.lang.Exception) {
-      result.error("ERROR", e.toString(), null)
-    }
-  }
-
-   private fun shareToFacebook222(url: String?, quote: String?, result: Result) {
-    FacebookSdk.sdkInitialize(activityContext!!)
-    if (url.isNullOrEmpty()) {
-        result.error("INVALID_URL", "URL이 비어 있습니다.", null)
-        return
-    }
-
-    val shareDialog = ShareDialog(activity!!)
-    val shareLinkContent = ShareLinkContent.Builder()
-        .setContentUrl(Uri.parse(url))
-        .setQuote(quote ?: "")
-        .build()
-
-    if (ShareDialog.canShow(ShareLinkContent::class.java)) {
-        shareDialog.show(shareLinkContent)
-        result.success("Success")
-    } else {
-        result.error("UNAVAILABLE", "ShareDialog를 사용할 수 없습니다.", null)
-    }
-}
-
-//  private fun shareToFacebook(url: String?, quote: String?, result: Result) {
 //    FacebookSdk.sdkInitialize(activityContext)
 
-  //  val shareDialog = ShareDialog (activity)
- //   val shareLinkContent = ShareLinkContent.Builder()
-  //          .setContentUrl(Uri.parse(url))
-  //          .setQuote(quote)
-  //          .build()
+    val shareDialog = ShareDialog (activity)
+    val shareLinkContent = ShareLinkContent.Builder()
+            .setContentUrl(Uri.parse(url))
+            .setQuote(quote)
+            .build()
 
- //   if (ShareDialog.canShow(ShareLinkContent::class.java)) {
- //     shareDialog.show(shareLinkContent)
- //     result.success("Success")
- //   }
-// }
+    if (ShareDialog.canShow(ShareLinkContent::class.java)) {
+      shareDialog.show(shareLinkContent)
+      result.success("Success")
+    }
+  }
 
 //  private fun instagramInstalled(): Boolean {
 //    try {
@@ -353,35 +301,35 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     result.success("success")
   }
 
-//  private fun purchased(call: MethodCall, result: Result) {
-//    var amount = (call.argument("amount") as? Double)?.toBigDecimal()
-//    var currency = Currency.getInstance(call.argument("currency") as? String)
-//    val parameters = call.argument("parameters") as? Map<String, Object>
-//    val parameterBundle = createBundleFromMap(parameters) ?: Bundle()
-//
-//    appEventsLogger.logPurchase(amount, currency, parameterBundle)
-//    result.success("success")
-//  }
+  private fun purchased(call: MethodCall, result: Result) {
+    var amount = (call.argument("amount") as? Double)?.toBigDecimal()
+    var currency = Currency.getInstance(call.argument("currency") as? String)
+    val parameters = call.argument("parameters") as? Map<String, Object>
+    val parameterBundle = createBundleFromMap(parameters) ?: Bundle()
 
-//  private fun logEvent(call: MethodCall, result: Result) {
-//    val eventName = call.argument("name") as? String
-//    val parameters = call.argument("parameters") as? Map<String, Object>
-//    val valueToSum = call.argument("_valueToSum") as? Double
-//
-//    if (valueToSum != null && parameters != null) {
-//      val parameterBundle = createBundleFromMap(parameters)
-//      appEventsLogger.logEvent(eventName, valueToSum, parameterBundle)
-//    } else if (valueToSum != null) {
-//      appEventsLogger.logEvent(eventName, valueToSum)
-//    } else if (parameters != null) {
-//      val parameterBundle = createBundleFromMap(parameters)
-//      appEventsLogger.logEvent(eventName, parameterBundle)
-//    } else {
-//      appEventsLogger.logEvent(eventName)
-//    }
-//
-//    result.success("success")
-//  }
+    appEventsLogger.logPurchase(amount, currency, parameterBundle)
+    result.success("success")
+  }
+
+  private fun logEvent(call: MethodCall, result: Result) {
+    val eventName = call.argument("name") as? String
+    val parameters = call.argument("parameters") as? Map<String, Object>
+    val valueToSum = call.argument("_valueToSum") as? Double
+
+    if (valueToSum != null && parameters != null) {
+      val parameterBundle = createBundleFromMap(parameters)
+      appEventsLogger.logEvent(eventName, valueToSum, parameterBundle)
+    } else if (valueToSum != null) {
+      appEventsLogger.logEvent(eventName, valueToSum)
+    } else if (parameters != null) {
+      val parameterBundle = createBundleFromMap(parameters)
+      appEventsLogger.logEvent(eventName, parameterBundle)
+    } else {
+      appEventsLogger.logEvent(eventName)
+    }
+
+    result.success("success")
+  }
 
   private fun pushNotificationOpen(call: MethodCall, result: Result) {
     val action = call.argument("action") as? String
@@ -389,9 +337,9 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     val payloadBundle = createBundleFromMap(payload)
 
     if (action != null) {
-    //  appEventsLogger.logPushNotificationOpen(payloadBundle, action)
+      appEventsLogger.logPushNotificationOpen(payloadBundle, action)
     } else {
-    //  appEventsLogger.logPushNotificationOpen(payloadBundle)
+      appEventsLogger.logPushNotificationOpen(payloadBundle)
     }
 
     result.success("success")

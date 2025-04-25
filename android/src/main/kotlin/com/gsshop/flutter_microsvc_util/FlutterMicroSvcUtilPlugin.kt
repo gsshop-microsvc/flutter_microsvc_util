@@ -59,8 +59,8 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     channel.setMethodCallHandler(this)
 
     activityContext = binding.getApplicationContext()
-    appEventsLogger = AppEventsLogger.newLogger(activityContext)
-    anonymousId = AppEventsLogger.getAnonymousAppDeviceGUID(activityContext)
+  //  appEventsLogger = AppEventsLogger.newLogger(activityContext)
+  //  anonymousId = AppEventsLogger.getAnonymousAppDeviceGUID(activityContext)
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -395,7 +395,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   companion object {
-//    private var callbackManager: CallbackManager? = null
+    private var callbackManager: CallbackManager? = null
     private const val INSTAGRAM_PACKAGE_NAME = "com.instagram.android"
     private const val WHATSAPP_PACKAGE_NAME = "com.whatsapp"
     private var registrar: PluginRegistry.Registrar? = null

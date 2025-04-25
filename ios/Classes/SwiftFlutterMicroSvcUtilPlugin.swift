@@ -15,6 +15,20 @@ extension Dictionary {
     }
 }
 
+extension SwiftFlutterMicroSvcUtilPlugin: SharingDelegate {
+    func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+        print("Facebook 공유 완료: \(results)")
+    }
+
+    func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+        print("Facebook 공유 실패: \(error.localizedDescription)")
+    }
+
+    func sharerDidCancel(_ sharer: Sharing) {
+        print("Facebook 공유 취소됨")
+    }
+}
+
 public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin, SharingDelegate {
   var result: FlutterResult?
   var shareURL:String?

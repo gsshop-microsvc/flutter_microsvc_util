@@ -26,13 +26,10 @@ import java.net.URLEncoder
 
 // import com.twitter.sdk.android.tweetcomposer.TweetComposer
 
-import com.facebook.CallbackManager
+//import com.facebook.CallbackManager
 import com.facebook.share.model.ShareLinkContent
 import com.facebook.share.widget.ShareDialog
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
-import com.facebook.GraphRequest
-import com.facebook.GraphResponse
+//import com.facebook.appevents.AppEventsLogger
 import java.util.*
 
 
@@ -43,7 +40,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
-  private lateinit var appEventsLogger: AppEventsLogger
+//  private lateinit var appEventsLogger: AppEventsLogger
   private lateinit var anonymousId: String
 
   private var activity: Activity? = null
@@ -54,7 +51,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   fun onAttachedToEngine(@NonNull flutterPluginBinding: BinaryMessenger) {
     channel = MethodChannel(flutterPluginBinding, "flutter_microsvc_util")
     channel.setMethodCallHandler(this)
-    callbackManager = CallbackManager.Factory.create()
+//    callbackManager = CallbackManager.Factory.create()
   }
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -63,8 +60,8 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 
     activityContext = binding.getApplicationContext()
 
-    appEventsLogger = AppEventsLogger.newLogger(activityContext)
-    anonymousId = AppEventsLogger.getAnonymousAppDeviceGUID(activityContext)
+//    appEventsLogger = AppEventsLogger.newLogger(activityContext)
+//    anonymousId = AppEventsLogger.getAnonymousAppDeviceGUID(activityContext)
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -72,7 +69,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onDetachedFromActivity() {
-    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivity")
+//    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivity")
     activity = null;
   }
 
@@ -85,7 +82,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
-    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivityForConfigChanges")
+//    Log.d(logTag, "flutter_microsvc_util onDetachedFromActivityForConfigChanges")
     activity = null;
   }
 
@@ -134,9 +131,9 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     } else if (call.method == "setAdvertiserTracking") {
       setAdvertiserTracking(call, result)
     } else if (call.method == "logEvent") {
-      logEvent(call, result)
+//      logEvent(call, result)
     } else if (call.method == "logPurchase") {
-      purchased(call, result)
+//      purchased(call, result)
     } else if (call.method == "logPushNotificationOpen") {
       pushNotificationOpen(call, result)
     } else {
@@ -151,20 +148,41 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
    * @param quote    String
    * @param result Result
    */
-  private fun shareToFacebook(url: String?, quote: String?, result: Result) {
-//    FacebookSdk.sdkInitialize(activityContext)
 
-    val shareDialog = ShareDialog (activity)
+   private fun shareToFacebook(url: String?, quote: String?, result: Result) {
+    if (url.isNullOrEmpty()) {
+        result.error("INVALID_URL", "URL이 비어 있습니다.", null)
+        return
+    }
+
+    val shareDialog = ShareDialog(activity)
     val shareLinkContent = ShareLinkContent.Builder()
-            .setContentUrl(Uri.parse(url))
-            .setQuote(quote)
-            .build()
+        .setContentUrl(Uri.parse(url))
+        .setQuote(quote ?: "")
+        .build()
 
     if (ShareDialog.canShow(ShareLinkContent::class.java)) {
-      shareDialog.show(shareLinkContent)
-      result.success("Success")
+        shareDialog.show(shareLinkContent)
+        result.success("Success")
+    } else {
+        result.error("UNAVAILABLE", "ShareDialog를 사용할 수 없습니다.", null)
     }
-  }
+}
+
+//  private fun shareToFacebook(url: String?, quote: String?, result: Result) {
+//    FacebookSdk.sdkInitialize(activityContext)
+
+  //  val shareDialog = ShareDialog (activity)
+ //   val shareLinkContent = ShareLinkContent.Builder()
+  //          .setContentUrl(Uri.parse(url))
+  //          .setQuote(quote)
+  //          .build()
+
+ //   if (ShareDialog.canShow(ShareLinkContent::class.java)) {
+ //     shareDialog.show(shareLinkContent)
+ //     result.success("Success")
+ //   }
+// }
 
 //  private fun instagramInstalled(): Boolean {
 //    try {
@@ -301,35 +319,35 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     result.success("success")
   }
 
-  private fun purchased(call: MethodCall, result: Result) {
-    var amount = (call.argument("amount") as? Double)?.toBigDecimal()
-    var currency = Currency.getInstance(call.argument("currency") as? String)
-    val parameters = call.argument("parameters") as? Map<String, Object>
-    val parameterBundle = createBundleFromMap(parameters) ?: Bundle()
+//  private fun purchased(call: MethodCall, result: Result) {
+//    var amount = (call.argument("amount") as? Double)?.toBigDecimal()
+//    var currency = Currency.getInstance(call.argument("currency") as? String)
+//    val parameters = call.argument("parameters") as? Map<String, Object>
+//    val parameterBundle = createBundleFromMap(parameters) ?: Bundle()
+//
+//    appEventsLogger.logPurchase(amount, currency, parameterBundle)
+//    result.success("success")
+//  }
 
-    appEventsLogger.logPurchase(amount, currency, parameterBundle)
-    result.success("success")
-  }
-
-  private fun logEvent(call: MethodCall, result: Result) {
-    val eventName = call.argument("name") as? String
-    val parameters = call.argument("parameters") as? Map<String, Object>
-    val valueToSum = call.argument("_valueToSum") as? Double
-
-    if (valueToSum != null && parameters != null) {
-      val parameterBundle = createBundleFromMap(parameters)
-      appEventsLogger.logEvent(eventName, valueToSum, parameterBundle)
-    } else if (valueToSum != null) {
-      appEventsLogger.logEvent(eventName, valueToSum)
-    } else if (parameters != null) {
-      val parameterBundle = createBundleFromMap(parameters)
-      appEventsLogger.logEvent(eventName, parameterBundle)
-    } else {
-      appEventsLogger.logEvent(eventName)
-    }
-
-    result.success("success")
-  }
+//  private fun logEvent(call: MethodCall, result: Result) {
+//    val eventName = call.argument("name") as? String
+//    val parameters = call.argument("parameters") as? Map<String, Object>
+//    val valueToSum = call.argument("_valueToSum") as? Double
+//
+//    if (valueToSum != null && parameters != null) {
+//      val parameterBundle = createBundleFromMap(parameters)
+//      appEventsLogger.logEvent(eventName, valueToSum, parameterBundle)
+//    } else if (valueToSum != null) {
+//      appEventsLogger.logEvent(eventName, valueToSum)
+//    } else if (parameters != null) {
+//      val parameterBundle = createBundleFromMap(parameters)
+//      appEventsLogger.logEvent(eventName, parameterBundle)
+//    } else {
+//      appEventsLogger.logEvent(eventName)
+//    }
+//
+//    result.success("success")
+//  }
 
   private fun pushNotificationOpen(call: MethodCall, result: Result) {
     val action = call.argument("action") as? String
@@ -377,7 +395,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   companion object {
-    private var callbackManager: CallbackManager? = null
+//    private var callbackManager: CallbackManager? = null
     private const val INSTAGRAM_PACKAGE_NAME = "com.instagram.android"
     private const val WHATSAPP_PACKAGE_NAME = "com.whatsapp"
     private var registrar: PluginRegistry.Registrar? = null

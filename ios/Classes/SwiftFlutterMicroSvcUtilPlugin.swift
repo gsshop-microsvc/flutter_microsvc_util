@@ -257,9 +257,19 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
     private func setAdvertiserTracking(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? [String: Any] ?? [String: Any]()
         let enabled = arguments["enabled"] as! Bool
-        Settings.setAdvertiserTrackingEnabled(enabled)        
+        // Settings.setAdvertiserTrackingEnabled(enabled)        
         self.result?("Success")
     }
+
+    extension Dictionary {
+    func mapKeys<T>(_ transform: (Key) throws -> T) rethrows -> [T: Value] where T: Hashable {
+        var result = [T: Value]()
+        for (key, value) in self {
+            result[try transform(key)] = value
+        }
+        return result
+    }
+}
 
     private func logEvent(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? [String: Any] ?? [String: Any]()
@@ -267,9 +277,11 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
         let parameters = arguments["parameters"] as? [String: Any] ?? [String: Any]()
         if arguments["_valueToSum"] != nil && !(arguments["_valueToSum"] is NSNull) {
             let valueToDouble = arguments["_valueToSum"] as! Double
-            AppEvents.logEvent(AppEvents.Name(eventName), valueToSum: valueToDouble, parameters: parameters)
+            AppEvents.logEvent(AppEvents.Name(eventName), valueToSum: valueToDouble, parameters:  parameters.mapKeys { AppEvents.ParameterName($0) })
         } else {
-            AppEvents.logEvent(AppEvents.Name(eventName), parameters: parameters)
+            // AppEvents.logEvent(AppEvents.Name(eventName), parameters: parameters)
+            AppEvents.logEvent(AppEvents.Name(eventName), parameters: parameters.mapKeys { AppEvents.ParameterName($0) })
+
         }
 
         self.result?("Success")
@@ -280,7 +292,8 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
         let amount = arguments["amount"] as! Double
         let currency = arguments["currency"] as! String
         let parameters = arguments["parameters"] as? [String: Any] ?? [String: Any]()
-        AppEvents.logPurchase(amount, currency: currency, parameters: parameters)
+        AppEvents.logPurchase(amount, currency: currency, parameters: parameters.mapKeys { AppEvents.ParameterName($0) })
+        // AppEvents.logPurchase(amount, currency: currency, parameters: parameters)
 
         self.result?("Success")
     }
@@ -290,7 +303,8 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
         let payload = arguments["payload"] as? [String: Any]
         if let action = arguments["action"] {
             let actionString = action as! String
-            AppEvents.logPushNotificationOpen(payload!, action: actionString)
+            // AppEvents.logPushNotificationOpen(payload!, action: actionString)
+            AppEvents.shared.logPushNotificationOpen(payload: payload!, action: actionString)
         } else {
             AppEvents.logPushNotificationOpen(payload!)
         }
@@ -299,7 +313,8 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
     }
 
     public func initializeSDK() {
-        ApplicationDelegate.initializeSDK(nil)
+        ApplicationDelegate.shared.application(UIApplication.shared, didFinishLaunchingWithOptions: nil)
+        // ApplicationDelegate.initializeSDK(nil)
     }
 }
 

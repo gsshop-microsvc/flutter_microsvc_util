@@ -21,15 +21,15 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin, SharingDel
   var result: FlutterResult?
   var shareURL:String?
 
-  func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+ public static func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
     print("공유 성공: \(results)")
 }
 
-func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+public static func sharer(_ sharer: Sharing, didFailWithError error: Error) {
     print("공유 실패: \(error.localizedDescription)")
 }
 
-func sharerDidCancel(_ sharer: Sharing) {
+public static func sharerDidCancel(_ sharer: Sharing) {
     print("공유 취소됨")
 }
 

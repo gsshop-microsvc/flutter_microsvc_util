@@ -152,7 +152,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
    * @param result Result
    */
   private fun shareToFacebook(url: String?, quote: String?, result: Result) {
-//    FacebookSdk.sdkInitialize(activityContext)
+    FacebookSdk.sdkInitialize(activityContext)
 
     val shareDialog = ShareDialog (activity)
     val shareLinkContent = ShareLinkContent.Builder()

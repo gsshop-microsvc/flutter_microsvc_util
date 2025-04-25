@@ -5,6 +5,16 @@ import Photos
 import MessageUI
 import FBSDKCoreKit
 
+extension Dictionary {
+    func mapKeys<T>(_ transform: (Key) throws -> T) rethrows -> [T: Value] where T: Hashable {
+        var result = [T: Value]()
+        for (key, value) in self {
+            result[try transform(key)] = value
+        }
+        return result
+    }
+}
+
 public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
   var result: FlutterResult?
   var shareURL:String?
@@ -261,15 +271,7 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
         self.result?("Success")
     }
 
-    extension Dictionary {
-    func mapKeys<T>(_ transform: (Key) throws -> T) rethrows -> [T: Value] where T: Hashable {
-        var result = [T: Value]()
-        for (key, value) in self {
-            result[try transform(key)] = value
-        }
-        return result
-    }
-}
+
 
     private func logEvent(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? [String: Any] ?? [String: Any]()

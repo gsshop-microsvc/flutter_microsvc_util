@@ -155,7 +155,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
         return
     }
 
-    val shareDialog = ShareDialog(activity)
+    val shareDialog = ShareDialog(activity!!)
     val shareLinkContent = ShareLinkContent.Builder()
         .setContentUrl(Uri.parse(url))
         .setQuote(quote ?: "")
@@ -355,9 +355,9 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     val payloadBundle = createBundleFromMap(payload)
 
     if (action != null) {
-      appEventsLogger.logPushNotificationOpen(payloadBundle, action)
+    //  appEventsLogger.logPushNotificationOpen(payloadBundle, action)
     } else {
-      appEventsLogger.logPushNotificationOpen(payloadBundle)
+    //  appEventsLogger.logPushNotificationOpen(payloadBundle)
     }
 
     result.success("success")

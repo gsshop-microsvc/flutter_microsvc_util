@@ -1,31 +1,35 @@
 package com.gsshop.flutter_microsvc_util
 
-// import com.twitter.sdk.android.tweetcomposer.TweetComposer
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.*
+import android.content.Context
 import android.content.pm.PackageManager
+import android.media.FaceDetector
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
 import androidx.annotation.NonNull
-import com.facebook.CallbackManager
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
-import com.facebook.share.model.ShareLinkContent
-import com.facebook.share.widget.ShareDialog
+import android.os.Bundle
+
+import io.flutter.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.PluginRegistry
-import java.io.File
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+
 import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLEncoder
+
+// import com.twitter.sdk.android.tweetcomposer.TweetComposer
+import com.facebook.FacebookSdk
+import com.facebook.CallbackManager
+import com.facebook.share.model.ShareLinkContent
+import com.facebook.share.widget.ShareDialog
+import com.facebook.appevents.AppEventsLogger
 import java.util.*
 
 
@@ -144,7 +148,6 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
    * @param result Result
    */
 
-  @androidx.annotation.RequiresApi(Build.VERSION_CODES.DONUT)
   private fun shareToFacebook(url: String?, quote: String?, result: Result) {
     try {
       val intent = Intent(Intent.ACTION_SEND)
@@ -165,9 +168,11 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 
       intent.putExtra(Intent.EXTRA_TEXT, str)
       // Set the package to Facebook
-      intent.setPackage("com.facebook.katana")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.DONUT) {
+            intent.setPackage("com.facebook.katana")
+        }
 
-      activity!!.startActivity(intent)
+        activity!!.startActivity(intent)
       result.success("success")
     } catch (e: ActivityNotFoundException) {
       result.error("FACEBOOK_NOT_INSTALLED", "Facebook is not installed on this device", null)

@@ -119,7 +119,6 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
     private func shareFacebookWithoutImage(withQuote quote: String?, withUrl urlString: String?) {
     DispatchQueue.main.async {
         let shareContent = ShareLinkContent()
-        let shareDialog = ShareDialog()
         
         if let url = urlString {
             shareContent.contentURL = URL(string: url)!
@@ -129,15 +128,17 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
             shareContent.quote = quoteString.htmlToString
         }
         
-        shareDialog.shareContent = shareContent
-        
         if let flutterAppDelegate = UIApplication.shared.delegate as? FlutterAppDelegate,
            let rootViewController = flutterAppDelegate.window?.rootViewController {
             
-            shareDialog.fromViewController = rootViewController
+            let shareDialog = ShareDialog(
+                fromViewController: rootViewController,
+                content: shareContent,
+                delegate: self
+            )
             shareDialog.mode = .automatic
-            shareDialog.delegate = self // 여기 수정!
             shareDialog.show()
+
             self.result?("Success")
         } else {
             self.result?("Failure")
@@ -303,7 +304,7 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
         let amount = arguments["amount"] as! Double
         let currency = arguments["currency"] as! String
         let parameters = arguments["parameters"] as? [String: Any] ?? [String: Any]()
-        AppEvents.shared.logPurchase(amount, currency: currency, parameters: parameters.mapKeys { AppEvents.ParameterName($0) })
+        AppEvents.shared.logPurchase(amount: amount, currency: currency, parameters: parameters.mapKeys { AppEvents.ParameterName($0) })
         // AppEvents.logPurchase(amount, currency: currency, parameters: parameters)
 
         self.result?("Success")
@@ -317,7 +318,7 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin {
             // AppEvents.logPushNotificationOpen(payload!, action: actionString)
             AppEvents.shared.logPushNotificationOpen(payload: payload!, action: actionString)
         } else {
-            AppEvents.shared.logPushNotificationOpen(payload!)
+            AppEvents.shared.logPushNotificationOpen(payload: payload!)
         }
 
         self.result?("Success")

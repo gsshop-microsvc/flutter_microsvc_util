@@ -16,7 +16,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugin.common.PluginRegistry
+//import io.flutter.plugin.common.PluginRegistry
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
@@ -380,7 +380,7 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     private var callbackManager: CallbackManager? = null
     private const val INSTAGRAM_PACKAGE_NAME = "com.instagram.android"
     private const val WHATSAPP_PACKAGE_NAME = "com.whatsapp"
-    private var registrar: PluginRegistry.Registrar? = null
+     // private var registrar: PluginRegistry.Registrar? = null
 
     // private void onAttachedToEngine(Context context, BinaryMessenger messenger) {
     //   activityContext = context;
@@ -389,9 +389,9 @@ class FlutterMicroSvcUtilPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     //   this.registrar=registrar;
     // }
 
-    private fun setRegistrar(_registrar: PluginRegistry.Registrar) {
-      registrar = _registrar
-    }
+    //private fun setRegistrar(_registrar: PluginRegistry.Registrar) {
+    //  registrar = _registrar
+   // }
 
     /**
      * Plugin registration.

@@ -205,7 +205,7 @@ public class SwiftFlutterMicroSvcUtilPlugin: NSObject, FlutterPlugin, SharingDel
         if (MFMessageComposeViewController.canSendText()) {
             self.result?("Success")
             let controller = MFMessageComposeViewController()
-            controller.body = string.htmlToString
+            controller.body = string
             controller.recipients = recipent
             controller.messageComposeDelegate = self
             UIApplication.shared.keyWindow?.rootViewController?.present(controller, animated: true, completion: nil)
